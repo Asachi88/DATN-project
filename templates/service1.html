@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Giám Sát Động Cơ 1</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .engine-image {
+            grid-column: 1;
+            grid-row: 1 / span 2;
+            text-align: center;
+        }
+
+        .engine-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .specs-table {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table th {
+            background-color: rgba(37, 99, 235, 0.1);
+            font-weight: 600;
+        }
+
+        .status {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        .status-indicators {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .status-item {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-good {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+        }
+
+        .status-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning-color);
+        }
+
+        .status-critical {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger-color);
+        }
+
+        .status-item h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+
+        .status-item .value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .status-good .value {
+            color: var(--success-color);
+        }
+
+        .status-warning .value {
+            color: var(--warning-color);
+        }
+
+        .status-critical .value {
+            color: var(--danger-color);
+        }
+
+        .usage-time, .prediction {
+            grid-column: 1 / span 2;
+        }
+
+        .progress-container {
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            height: 25px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            background-color: var(--primary-color);
+            width: 75%;
+        }
+
+        .progress-label {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #1e293b;
+            font-weight: bold;
+        }
+
+        .prediction .warning-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .prediction .warning-list li {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .prediction .warning-list li.medium {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .prediction .warning-list li.high {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .prediction .warning-list .icon {
+            font-size: 24px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .prediction .warning-list .warning-details {
+            flex: 1;
+        }
+
+        .prediction .warning-list .warning-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .prediction .warning-list .recommendation {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .prediction .warning-list .risk {
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        .prediction .warning-list .risk.medium {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .prediction .warning-list .risk.high {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .engine-image, .specs-table, .status, .usage-time, .prediction {
+                grid-column: 1;
+            }
+
+            .engine-image {
+                grid-row: 1;
+            }
+
+            .specs-table {
+                grid-row: 2;
+            }
+
+            .status {
+                grid-row: 3;
+            }
+
+            .usage-time {
+                grid-row: 4;
+            }
+
+            .prediction {
+                grid-row: 5;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Hệ Thống Giám Sát Động Cơ 1</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard">
+            <div class="card engine-image">
+                <h2>Hình Ảnh Động Cơ</h2>
+                <img src="hình động cơ KĐB.jpg" alt="Hình ảnh động cơ" style="width: 100%; height: auto; max-height: 400px;">
+                <div style="margin-top: 15px; text-align: left;">
+                    <p><strong>Loại động cơ:</strong> Động cơ diesel 4 xi-lanh TDI</p>
+                    <p><strong>Mã động cơ:</strong> M-D4500-TDI</p>
+                    <p><strong>Số serial:</strong> VN2023051206</p>
+                </div>
+            </div>
+
+            <div class="card specs-table">
+                <h2>Thông Số Kỹ Thuật</h2>
+                <table>
+                    <tr>
+                        <th>Thông số</th>
+                        <th>Giá trị</th>
+                    </tr>
+                    <tr>
+                        <td>Công suất tối đa</td>
+                        <td>170 HP @ 4000 rpm</td>
+                    </tr>
+                    <tr>
+                        <td>Mô-men xoắn</td>
+                        <td>350 Nm @ 2000-2750 rpm</td>
+                    </tr>
+                    <tr>
+                        <td>Dung tích xi-lanh</td>
+                        <td>2.0L (1968 cc)</td>
+                    </tr>
+                    <tr>
+                        <td>Tỷ số nén</td>
+                        <td>16.5:1</td>
+                    </tr>
+                    <tr>
+                        <td>Tiêu chuẩn khí thải</td>
+                        <td>Euro 5</td>
+                    </tr>
+                    <tr>
+                        <td>Hệ thống nhiên liệu</td>
+                        <td>Phun dầu common rail</td>
+                    </tr>
+                    <tr>
+                        <td>Mức tiêu thụ nhiên liệu</td>
+                        <td>5.6L/100km</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card status">
+                <h2>Tình Trạng Động Cơ</h2>
+                <div class="status-indicators">
+                    <div class="status-item status-good">
+                        <h3>Nhiệt độ</h3>
+                        <div class="value" id="temperature">85°C</div>
+                    </div>
+                    <div class="status-item status-good">
+                        <h3>Áp suất dầu</h3>
+                        <div class="value" id="apsuat">3.5 bar</div>
+                    </div>
+                    <div class="status-item status-warning">
+                        <h3>Hiệu suất</h3>
+                        <div class="value"id="hieu-suat">78%</div>
+                    </div>
+                    <div class="status-item status-critical">
+                        <h3>Khí thải</h3>
+                        <div class="value">Cao</div>
+                    </div>
+                    <script>
+                        function updateHieuSuat() {
+                            const valueElement = document.getElementById("hieu-suat");
+                            const randomValue = (Math.random() * (100 - 60) + 60).toFixed(1); // từ 60% đến 100%
+                            valueElement.textContent = `${randomValue}%`;
+                        }
+                        function updateNhietdo() {
+                            const valueElement = document.getElementById("temperature");
+                            const randomValue = (Math.random() * (100 - 60) + 60).toFixed(1); // từ 60% đến 100%
+                            valueElement.textContent = `${randomValue}°C`;
+                        }
+                        function updateApSuat() {
+                            const valueElement = document.getElementById("apsuat");
+                            const randomValue = (Math.random() * (10 - 9) + 9).toFixed(1); // từ 60% đến 100%
+                            valueElement.textContent = `${randomValue}bar`;
+                        }
+                    
+                        // Cập nhật mỗi 5 giây
+                        setInterval(updateHieuSuat, 5000);
+                        setInterval(updateNhietdo, 5000);
+                        setInterval(updateApSuat, 5000);
+                    </script>
+                </div>
+            </div>
+
+            <div class="card usage-time">
+                <h2>Thời Gian Sử Dụng</h2>
+                <table>
+                    <tr>
+                        <td>Tổng thời gian vận hành:</td>
+                        <td><strong>3,250 giờ</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Ngày bắt đầu sử dụng:</td>
+                        <td><strong>12/05/2023</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Chu kỳ bảo dưỡng đề xuất:</td>
+                        <td><strong>500 giờ</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Thời gian từ lần bảo dưỡng cuối:</td>
+                        <td><strong>450 giờ</strong></td>
+                    </tr>
+                </table>
+                <p>Tiến độ đến kỳ bảo dưỡng tiếp theo:</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                    <div class="progress-label">90%</div>
+                </div>
+            </div>
+
+            <div class="card prediction">
+                <h2>Dự Đoán Hư Hỏng</h2>
+                <p>Dựa trên dữ liệu vận hành và mô hình dự đoán AI, hệ thống đã xác định các rủi ro tiềm ẩn sau:</p>
+                <ul class="warning-list">
+                    <li class="high">
+                        <div class="icon">⚠️</div>
+                        <div class="warning-details">
+                            <div class="warning-title">Lọc khí thải cần thay thế</div>
+                            <div class="recommendation">Kiểm tra và thay thế lọc khí thải trong vòng 50 giờ vận hành tới. Chỉ số NOx đang vượt ngưỡng cho phép.</div>
+                        </div>
+                        <span class="risk high">Cao</span>
+                    </li>
+                    <li class="medium">
+                        <div class="icon">⚠️</div>
+                        <div class="warning-details">
+                            <div class="warning-title">Hiệu suất động cơ giảm</div>
+                            <div class="recommendation">Kiểm tra kim phun và hệ thống làm mát. Hiệu suất giảm 22% so với thông số tiêu chuẩn.</div>
+                        </div>
+                        <span class="risk medium">Trung bình</span>
+                    </li>
+                    <li class="medium">
+                        <div class="icon">⚠️</div>
+                        <div class="warning-details">
+                            <div class="warning-title">Dầu động cơ cần thay</div>
+                            <div class="recommendation">Thực hiện thay dầu trong lần bảo dưỡng tới. Độ nhớt dầu hiện tại đã giảm 15%.</div>
+                        </div>
+                        <span class="risk medium">Trung bình</span>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 30px;">
+                    <h3>Dự đoán tuổi thọ còn lại của các bộ phận:</h3>
+                    <table>
+                        <tr>
+                            <th>Bộ phận</th>
+                            <th>Tình trạng</th>
+                            <th>Thời gian còn lại</th>
+                        </tr>
+                        <tr>
+                            <td>Lọc khí thải</td>
+                            <td>Kém</td>
+                            <td>50 giờ</td>
+                        </tr>
+                        <tr>
+                            <td>Bộ lọc dầu</td>
+                            <td>Trung bình</td>
+                            <td>250 giờ</td>
+                        </tr>
+                        <tr>
+                            <td>Bơm nhiên liệu</td>
+                            <td>Tốt</td>
+                            <td>1,200 giờ</td>
+                        </tr>
+                        <tr>
+                            <td>Dây đai cam</td>
+                            <td>Khá</td>
+                            <td>800 giờ</td>
+                        </tr>
+                        <tr>
+                            <td>Turbo</td>
+                            <td>Tốt</td>
+                            <td>1,500 giờ</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Hệ Thống Giám Sát Động Cơ 1 | Phiên bản 1.0.0</p>
+        </div>
+    </footer>
+
+    <script>
+        // Đây là nơi để thêm JavaScript nếu cần để cập nhật dữ liệu theo thời gian thực
+        // Ví dụ: cập nhật thông số động cơ, tình trạng, dự đoán, vv.
+        
+        // Giả lập cập nhật thông số
+        function updateEngineData() {
+            // Mã code ở đây sẽ cập nhật thông số động cơ từ API hoặc nguồn dữ liệu thực tế
+            console.log("Đã cập nhật dữ liệu động cơ");
+        }
+        
+        // Gọi hàm cập nhật mỗi 30 giây
+        // setInterval(updateEngineData, 30000);
+    </script>
+</body>
+</html>

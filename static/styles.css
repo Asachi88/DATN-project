@@ -1,0 +1,304 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+}
+.process-status {
+    margin-top: 20px;
+    color: #555;
+    font-size: 16px;
+}
+
+.result {
+    margin-top: 20px;
+    color: #0d0b0b;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+.sidebar {
+    position: fixed;
+    top: 60px; /* Đẩy menu xuống dưới header */
+    left: 0;
+    height: calc(100% - 60px);
+    width: 200px;
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.menu-button {
+    display: inline-block; /* Hiển thị các nút trên cùng một hàng */
+    text-decoration: none;
+    color: white;
+    background-color: #555;
+    padding: 10px 15px;
+    margin: 5px 0;
+    text-align: left;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    white-space: nowrap; /* Ngăn không cho văn bản xuống dòng */
+}
+
+.menu-button:hover {
+    background-color: #777;
+}
+
+
+
+.sidebar button {
+    background-color: #555; /* Màu nền nút */
+    color: white; /* Màu chữ */
+    border: none;
+    padding: 10px 15px;
+    margin: 5px 0;
+    text-align: left; /* Căn chữ sang trái */
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #777; /* Màu khi rê chuột qua nút */
+}
+
+.content {
+    margin-left: 220px; /* Tạo khoảng trống bên trái để không bị menu che khuất */
+    padding: 20px;
+}
+
+section {
+    margin: 50px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+section h1 {
+    margin-top: 0;
+}
+
+
+/* Container chính của header */
+.header-container {
+    display: flex; /* Sử dụng Flexbox */
+    justify-content: space-between; /* Đẩy các phần tử sang hai đầu */
+    align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+    height: 65px; /* Chiều cao header */
+    padding: 0 20px; /* Khoảng cách bên trong */
+    background-color: #f4f4f9; /* Màu nền nhạt */
+    border-bottom: 2px solid #ddd; /* Đường kẻ dưới */
+    position: fixed; /* Cố định header */
+    top: 0; /* Đặt ở trên cùng */
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    z-index: 1000; /* Đảm bảo header nằm trên các phần tử khác */
+}
+
+/* Phần bên trái: Logo và tiêu đề */
+.left-section {
+    display: flex; /* Hiển thị logo và tiêu đề cạnh nhau */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 10px; /* Khoảng cách giữa logo và tiêu đề */
+}
+
+/* Logo */
+.logo {
+    width: 65px; /* Kích thước logo */
+    height: auto; /* Duy trì tỷ lệ */
+}
+
+/* Tiêu đề */
+.page-title {
+    font-size: 24px; /* Kích thước chữ tiêu đề */
+    color: #333; /* Màu chữ */
+    margin: 0; /* Xóa khoảng cách mặc định */
+    font-weight: bold; /* Chữ đậm */
+}
+
+/* Phần bên phải: Các nút và biểu tượng */
+.right-section {
+    display: flex; /* Hiển thị các nút cạnh nhau */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 15px; /* Khoảng cách giữa các phần tử */
+    transform: translateX(-15px); /* Dịch qua trái 1 khoảng nhỏ */
+}
+
+/* Định dạng biểu tượng */
+.icon {
+    width: 30px; /* Kích thước biểu tượng */
+    height: auto; /* Duy trì tỷ lệ */
+    cursor: pointer; /* Thêm hiệu ứng con trỏ */
+}
+
+/* Định dạng nút đăng nhập */
+.login-button {
+    background-color: #007bff; /* Màu nền xanh dương */
+    color: white; /* Màu chữ */
+    border: none; /* Xóa viền */
+    padding: 8px 15px; /* Khoảng cách bên trong nút */
+    border-radius: 5px; /* Bo góc nút */
+    font-size: 14px; /* Kích thước chữ */
+    cursor: pointer; /* Hiệu ứng con trỏ */
+}
+
+/* Hiệu ứng hover cho nút đăng nhập */
+.login-button:hover {
+    background-color: #0056b3; /* Màu nền đậm hơn khi hover */
+}
+
+
+
+.container {
+    background: white;
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #555;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.file-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.button-group {
+    margin-top: 20px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #007BFF;
+}
+/* Định vị văn bản trong khoảng trắng */
+/* Văn bản trực tiếp trên nền */
+.text-overlay {
+    position: absolute; /* Định vị tuyệt đối */
+    top: 25%; /* Đẩy xuống giữa màn hình */
+    left: 60%; /* Đẩy sang giữa màn hình */
+    transform: translate(-50%, -50%); /* Canh giữa */
+    color: rgb(11, 10, 10); /* Màu chữ nổi bật */
+    font-size: 18px; /* Kích thước chữ */
+    font-weight: normal; /* Chữ bình thường */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0); /* Tạo bóng cho chữ */
+    white-space: nowrap; /* Ngăn không cho văn bản xuống dòng */
+    overflow: hidden; /* Ẩn phần văn bản bị tràn ra ngoài */
+    text-overflow: ellipsis; /* Thêm dấu "..." nếu văn bản quá dài */
+}
+/* Cập nhật màu sắc và kiểu chữ cho phần kết quả */
+.result {
+    margin-top: 20px;
+    color: #333;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Định dạng cho phần Summary */
+#result p {
+    font-family: 'Courier New', Courier, monospace;
+    color: #333;
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+    white-space: pre-wrap;
+}
+
+.process-status {
+    margin-top: 20px;
+    color: #333;
+    font-size: 16px;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+/* Container hình ảnh */
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 60px 0; /* Tăng khoảng cách trên và dưới */
+    gap: 40px; /* Khoảng cách giữa các hình ảnh */
+    transform: translate(110px, 60px); /* Dịch chuyển container sang phải và xuống dưới */
+}
+/* Định dạng cho các hình ảnh khác */
+.custom-image {
+    width: 500px; /* Kích thước lớn hơn logo */
+    height: 300px; /* Đặt chiều cao cố định */
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+    border-radius: 8px; /* Bo tròn nhẹ góc ảnh */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng hover */
+}
+
+/* Hiệu ứng khi di chuột qua các hình ảnh khác */
+.custom-image:hover {
+    transform: scale(1.1); /* Phóng to hình ảnh nhẹ khi hover */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Tăng hiệu ứng đổ bóng */
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    color: black;
+    text-align: center;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}

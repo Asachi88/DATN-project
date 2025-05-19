@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Interface</title>
+    <link rel="stylesheet" href="/App/static/styles.css">
+    
+</head>
+<body>
+    <!-- Thanh menu bên trái -->
+    <div class="sidebar">
+        <a href="home.html" class="menu-button">Trang chủ</a>
+        <div class="dropdown">
+            <button class="menu-button dropdown-button">Động cơ</button>
+            <div class="dropdown-content">
+                <div class="dropdown-wrapper">
+                    <a href="service1.html" class="menu-button">Động cơ 1</a>
+                    <a href="service2.html" class="menu-button">Động cơ 2</a>
+                    <a href="http://127.0.0.1:5000" class="menu-button">Dự đoán hư hỏng</a>
+                </div>
+            </div>
+        </div>
+        <a href="about.html" class="menu-button">Thông tin</a>
+        <a href="contact.html" class="menu-button">Liên hệ</a>
+        <a href="parner.html" class="menu-button">Đối tác</a>
+    </div>
+
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            z-index: 1;
+            padding-left: 20px; /* Dịch các nút con qua phải 1 khoảng */
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-button::after {
+            content: ' ►';
+        }
+
+        .dropdown-wrapper {
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            
+        }
+    </style>
+
+    <div class="header-container">
+        <!-- Logo và Tiêu đề bên trái -->
+        <div class="left-section">
+            <img src="logo.png" alt="Logo" class="logo">
+            <h1 class="page-title">Sản phẩm đồ án tốt nghiệp</h1>
+        </div>
+    
+        <!-- Các nút và biểu tượng bên phải -->
+        <div class="right-section">
+            <img src="notification-icon.png"  class="icon">
+            <img src="message-icon.png"  class="icon">
+            <button onclick="location.href='login.html'" class="login-button">Đăng nhập</button>
+        </div>
+    </div>
+    <!-- Thêm hình ảnh -->
+    <div class="image-container">
+        <img src="image1.jpg" alt="Image 1" class="custom-image">
+        <img src="image2.jpg" alt="Image 2" class="custom-image">
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <marquee behavior="scroll" direction="left">Trường Đại Học Bách Khoa Thành Phố Hồ Chí Minh - ĐHQG Thành phố Hồ Chí Minh</marquee>
+    </div>
+    
+    
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<link rel="stylesheet" href="/App/static/styles.css">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.auth-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    margin: auto;
+}
+.auth-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.auth-container input[type="text"],
+.auth-container input[type="password"],
+.auth-container input[type="email"] {
+    width: 93%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.auth-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.auth-container button:hover {
+    background-color: #45a049;
+}
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+.success-message {
+    color: green;
+    margin-top: 10px;
+}
+.auth-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    font-size: 14px;
+}
+.auth-links a {
+    color: #4CAF50;
+    text-decoration: none;
+    cursor: pointer;
+}
+.auth-links a:hover {
+    text-decoration: underline;
+}
+.form-container {
+    display: none;
+}
+.form-container.active {
+    display: block;
+}
+.back-btn {
+    background-color: #f2f2f2;
+    color: #333;
+    margin-right: 10px;
+}
+.back-btn:hover {
+    background-color: #e0e0e0;
+}
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+</style>
+</head>
+<body>
+<div class="header-container">
+<!-- Logo và Tiêu đề bên trái -->
+<div class="left-section">
+<img src="logo.png" alt="Logo" class="logo">
+<h1 class="page-title">Sản phẩm đồ án tốt nghiệp</h1>
+</div>
+<!-- Các nút và biểu tượng bên phải -->
+<div class="right-section">
+<img src="client.png" class="icon">
+</div>
+</div>
+
+<div class="auth-container">
+    <!-- Login Form -->
+    <div id="loginForm" class="form-container active">
+        <h2>Đăng nhập</h2>
+        <form id="loginFormSubmit">
+            <label for="username">Tên đăng nhập:</label>
+            <input type="text" id="username" placeholder="Nhập tên đăng nhập" required>
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+            <button type="submit">Đăng nhập</button>
+        </form>
+        <p class="error-message" id="loginErrorMessage"></p>
+        <div class="auth-links">
+            <a id="showRegisterForm">Đăng ký tài khoản</a>
+            <a id="showForgotPasswordForm">Quên mật khẩu?</a>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+    <div id="registerForm" class="form-container">
+        <h2>Đăng ký</h2>
+        <form id="registerFormSubmit">
+            <label for="regUsername">Tên đăng nhập:</label>
+            <input type="text" id="regUsername" placeholder="Nhập tên đăng nhập" required>
+            <label for="regEmail">Email:</label>
+            <input type="email" id="regEmail" placeholder="Nhập email" required>
+            <label for="regPassword">Mật khẩu:</label>
+            <input type="password" id="regPassword" placeholder="Nhập mật khẩu" required>
+            <label for="regConfirmPassword">Xác nhận mật khẩu:</label>
+            <input type="password" id="regConfirmPassword" placeholder="Nhập lại mật khẩu" required>
+            <div class="button-group">
+                <button type="button" class="back-btn" id="regBackBtn">Quay lại</button>
+                <button type="submit">Đăng ký</button>
+            </div>
+        </form>
+        <p class="error-message" id="registerErrorMessage"></p>
+        <p class="success-message" id="registerSuccessMessage"></p>
+    </div>
+
+    <!-- Forgot Password Form -->
+    <div id="forgotPasswordForm" class="form-container">
+        <h2>Quên mật khẩu</h2>
+        <form id="forgotPasswordFormSubmit">
+            <label for="forgotEmail">Email:</label>
+            <input type="email" id="forgotEmail" placeholder="Nhập email đăng ký" required>
+            <div class="button-group">
+                <button type="button" class="back-btn" id="forgotBackBtn">Quay lại</button>
+                <button type="submit">Gửi yêu cầu</button>
+            </div>
+        </form>
+        <p class="error-message" id="forgotPasswordErrorMessage"></p>
+        <p class="success-message" id="forgotPasswordSuccessMessage"></p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get form elements
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    
+    // Get navigation elements
+    const showRegisterFormLink = document.getElementById('showRegisterForm');
+    const showForgotPasswordFormLink = document.getElementById('showForgotPasswordForm');
+    const regBackBtn = document.getElementById('regBackBtn');
+    const forgotBackBtn = document.getElementById('forgotBackBtn');
+    
+    // Form submit handlers
+    const loginFormSubmit = document.getElementById('loginFormSubmit');
+    const registerFormSubmit = document.getElementById('registerFormSubmit');
+    const forgotPasswordFormSubmit = document.getElementById('forgotPasswordFormSubmit');
+    
+    // Error and success message elements
+    const loginErrorMessage = document.getElementById('loginErrorMessage');
+    const registerErrorMessage = document.getElementById('registerErrorMessage');
+    const registerSuccessMessage = document.getElementById('registerSuccessMessage');
+    const forgotPasswordErrorMessage = document.getElementById('forgotPasswordErrorMessage');
+    const forgotPasswordSuccessMessage = document.getElementById('forgotPasswordSuccessMessage');
+    
+    // Show register form
+    showRegisterFormLink.addEventListener('click', function() {
+        loginForm.classList.remove('active');
+        registerForm.classList.add('active');
+        forgotPasswordForm.classList.remove('active');
+        
+        // Clear any existing messages
+        clearAllMessages();
+    });
+    
+    // Show forgot password form
+    showForgotPasswordFormLink.addEventListener('click', function() {
+        loginForm.classList.remove('active');
+        registerForm.classList.remove('active');
+        forgotPasswordForm.classList.add('active');
+        
+        // Clear any existing messages
+        clearAllMessages();
+    });
+    
+    // Back to login from register form
+    regBackBtn.addEventListener('click', function() {
+        loginForm.classList.add('active');
+        registerForm.classList.remove('active');
+        forgotPasswordForm.classList.remove('active');
+        
+        // Clear any existing messages
+        clearAllMessages();
+    });
+    
+    // Back to login from forgot password form
+    forgotBackBtn.addEventListener('click', function() {
+        loginForm.classList.add('active');
+        registerForm.classList.remove('active');
+        forgotPasswordForm.classList.remove('active');
+        
+        // Clear any existing messages
+        clearAllMessages();
+    });
+    
+    // Handle login form submission
+    loginFormSubmit.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        
+        // Form validation
+        if (username === '' || password === '') {
+            loginErrorMessage.textContent = 'Vui lòng nhập đầy đủ thông tin';
+            return;
+        }
+        
+        // Send login request to server
+        fetch('login.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Login successful - redirect to dashboard
+                window.location.href = data.redirect;
+            } else {
+                // Display error message
+                loginErrorMessage.textContent = data.message;
+            }
+        })
+        .catch(error => {
+            loginErrorMessage.textContent = 'Đã xảy ra lỗi. Vui lòng thử lại sau.';
+            console.error('Error:', error);
+        });
+    });
+    
+    // Handle registration form submission
+    registerFormSubmit.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('regUsername').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('regConfirmPassword').value;
+        
+        // Form validation
+        if (username === '' || email === '' || password === '' || confirmPassword === '') {
+            registerErrorMessage.textContent = 'Vui lòng nhập đầy đủ thông tin';
+            return;
+        }
+        
+        // Password match validation
+        if (password !== confirmPassword) {
+            registerErrorMessage.textContent = 'Mật khẩu xác nhận không khớp';
+            return;
+        }
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            registerErrorMessage.textContent = 'Email không hợp lệ';
+            return;
+        }
+        
+        // Password strength validation
+        if (password.length < 6) {
+            registerErrorMessage.textContent = 'Mật khẩu phải có ít nhất 6 ký tự';
+            return;
+        }
+        
+        // Send registration request to server
+        fetch('register.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, email, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Registration successful
+                registerSuccessMessage.textContent = data.message;
+                registerErrorMessage.textContent = '';
+                
+                // Reset form after successful registration
+                setTimeout(() => {
+                    loginForm.classList.add('active');
+                    registerForm.classList.remove('active');
+                    registerFormSubmit.reset();
+                    registerSuccessMessage.textContent = '';
+                }, 3000);
+            } else {
+                // Display error message
+                registerErrorMessage.textContent = data.message;
+                registerSuccessMessage.textContent = '';
+            }
+        })
+        .catch(error => {
+            registerErrorMessage.textContent = 'Đã xảy ra lỗi. Vui lòng thử lại sau.';
+            console.error('Error:', error);
+        });
+    });
+    
+    // Handle forgot password form submission
+    forgotPasswordFormSubmit.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('forgotEmail').value.trim();
+        
+        // Form validation
+        if (email === '') {
+            forgotPasswordErrorMessage.textContent = 'Vui lòng nhập email';
+            return;
+        }
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            forgotPasswordErrorMessage.textContent = 'Email không hợp lệ';
+            return;
+        }
+        
+        // Send forgot password request to server
+        fetch('forgot_password.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Request successful
+                forgotPasswordSuccessMessage.textContent = data.message;
+                forgotPasswordErrorMessage.textContent = '';
+                
+                // Reset form after successful submission
+                setTimeout(() => {
+                    loginForm.classList.add('active');
+                    forgotPasswordForm.classList.remove('active');
+                    forgotPasswordFormSubmit.reset();
+                    forgotPasswordSuccessMessage.textContent = '';
+                }, 3000);
+            } else {
+                // Display error message
+                forgotPasswordErrorMessage.textContent = data.message;
+                forgotPasswordSuccessMessage.textContent = '';
+            }
+        })
+        .catch(error => {
+            forgotPasswordErrorMessage.textContent = 'Đã xảy ra lỗi. Vui lòng thử lại sau.';
+            console.error('Error:', error);
+        });
+    });
+    
+    // Utility function to clear all messages
+    function clearAllMessages() {
+        loginErrorMessage.textContent = '';
+        registerErrorMessage.textContent = '';
+        registerSuccessMessage.textContent = '';
+        forgotPasswordErrorMessage.textContent = '';
+        forgotPasswordSuccessMessage.textContent = '';
+    }
+});
+</script>
+</body>
+</html>

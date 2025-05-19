@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Interface</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script defer src="/static/script.js">
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Fault Prediction System</h1>
+        <form id="upload-form">
+            <label for="model-select">Choose a Model:</label>
+            <select id="model-select" name="model">
+                <option value="dt_model">Model Decision Tree</option>
+                <option value="rf_model">Model Random Forest</option>
+                <option value="SVM_model">Model SVM</option>
+                <option value="KNN_model">Model KNN</option>
+                <option value="DNN_model">Model DNN</option>
+            </select>
+            <br><br>
+            <label for="file">Upload CSV:</label>
+            <input type="file" id="file" name="file" accept=".csv" required>
+            <br><br>
+            <button type="submit">Predict</button>
+        </form>
+
+        <div id="process-status" class="process-status">
+            <!-- Trạng thái quá trình đọc file và dự đoán -->
+        </div>
+
+        <div id="result" class="result">
+            <!-- Kết quả sẽ được hiển thị ở đây -->
+        </div>
+    </div>
+</body>
+</html>
